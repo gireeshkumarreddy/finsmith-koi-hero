@@ -1,0 +1,8 @@
+# local preview config
+.claude/
+
+# copy of the koi model; index.html loads it by URL
+koi-src/
+
+# build of the page for the hosted Claude artifact
+artifact/

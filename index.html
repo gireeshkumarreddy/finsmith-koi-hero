@@ -1,0 +1,913 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Finsmith — Craft</title>
+<meta name="description" content="Branding shaped to endure and evolve with your ambition.">
+<meta name="theme-color" content="#b0060e">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://d8j0ntlcm91z4.cloudfront.net" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Outfit:wght@300;600&family=Poppins:wght@700&display=swap">
+<style>
+  :root {
+    --red: #b0060e;
+    --red-lift: #c20b14;
+    --red-deep: #8f030a;
+    --shadow: 74 0 6;
+    --cream: #f7f2e8;
+    --ink: #17110f;
+    --pellet: #f2d29b;
+    --pellet-edge: #c98f4a;
+    --ripple: clamp(90px, 11vw, 190px);
+    --gutter: clamp(20px, 3vw, 60px);
+    --display: "Poppins", "Arial Black", sans-serif;
+    --body: "Outfit", "Helvetica Neue", Arial, sans-serif;
+    --logo: "Anton", "Arial Narrow", Impact, sans-serif;
+  }
+
+  * { box-sizing: border-box }
+
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: var(--red);
+    color: var(--cream);
+    font-family: var(--body);
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+
+  .hero {
+    position: relative;
+    height: 100vh;
+    height: 100svh;
+    min-height: 420px;
+    overflow: hidden;
+    isolation: isolate;
+    touch-action: pan-y;
+    background: radial-gradient(120% 90% at 58% 46%, var(--red-lift) 0%, var(--red) 46%, var(--red-deep) 100%);
+  }
+
+  .sky { position: absolute; inset: 0; z-index: 0; pointer-events: none }
+
+  .star {
+    position: absolute;
+    width: var(--s);
+    height: var(--s);
+    translate: -50% -50%;
+    fill: #fff3d6;
+    filter: drop-shadow(0 0 calc(var(--s) * .35) rgb(255 214 150 / .75));
+    animation: twinkle var(--d) ease-in-out var(--o) infinite;
+  }
+  .star.dot { border-radius: 50%; background: #ffe9c4; filter: none }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: .95; scale: 1 }
+    50% { opacity: .25; scale: .55 }
+  }
+
+  .hero__title {
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    top: 44%;
+    translate: -50% -50%;
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: min(23.6vw, 62vh);
+    line-height: .8;
+    letter-spacing: -.035em;
+    color: var(--cream);
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  .koi {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    display: block;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 1.1s ease;
+    filter: drop-shadow(var(--sx, -10px) var(--sy, 26px) var(--sb, 22px) rgb(var(--shadow) / .5));
+  }
+  .koi.is-ready { opacity: 1 }
+
+  /* surface layer: food pellets and ripples float above the koi */
+  .pond { position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: hidden }
+
+  .ripple {
+    position: absolute;
+    width: calc(var(--ripple) * var(--k, 1));
+    aspect-ratio: 1;
+    translate: -50% -50%;
+    border: 1.5px solid rgb(247 242 232 / .6);
+    border-radius: 50%;
+    animation: ripple 1.7s cubic-bezier(.15, .55, .35, 1) both;
+  }
+  .ripple--soft { border-color: rgb(247 242 232 / .32) }
+  @keyframes ripple {
+    from { scale: .06; opacity: .95 }
+    to { scale: 1; opacity: 0 }
+  }
+
+  .pellet {
+    position: absolute;
+    width: clamp(8px, .6vw, 11px);
+    aspect-ratio: 1;
+    translate: -50% -50%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, var(--cream), var(--pellet) 55%, var(--pellet-edge));
+    box-shadow: 0 2px 5px rgb(var(--shadow) / .5);
+    animation: pellet-drop .45s cubic-bezier(.3, 1.5, .5, 1) both, pellet-bob 2.6s ease-in-out .45s infinite;
+  }
+  .pellet.is-eaten { animation: pellet-eaten .3s ease-in forwards }
+  .pellet.is-sinking { animation: pellet-sink 1.4s ease-in forwards }
+  @keyframes pellet-drop { from { scale: 2.4; opacity: 0 } }
+  @keyframes pellet-bob { 50% { translate: -50% calc(-50% + 2px) } }
+  @keyframes pellet-eaten { to { scale: 0; opacity: 0 } }
+  @keyframes pellet-sink { to { scale: .5; opacity: 0 } }
+
+  .nav {
+    position: absolute;
+    z-index: 3;
+    top: calc(var(--gutter) * .8 + env(safe-area-inset-top));
+    right: calc(var(--gutter) * .88 + env(safe-area-inset-right));
+    display: flex;
+    align-items: center;
+    height: clamp(46px, 3.3vw, 66px);
+    padding: 0 clamp(6px, .5vw, 10px);
+    background: var(--cream);
+    border-radius: 999px;
+    color: var(--ink);
+  }
+
+  .nav__menu, .nav__link {
+    display: grid;
+    place-items: center;
+    height: 100%;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    text-decoration: none;
+    border-radius: 999px;
+    transition: opacity .2s ease;
+  }
+  .nav__menu { width: clamp(44px, 3.2vw, 62px); padding: 0 }
+  .nav__menu svg { width: clamp(18px, 1.2vw, 24px); height: auto }
+  .nav__link {
+    padding: 0 clamp(14px, 1.2vw, 24px);
+    font-weight: 600;
+    font-size: clamp(12px, .78vw, 15.5px);
+    letter-spacing: .01em;
+    text-transform: uppercase;
+  }
+  .nav__rule { width: 1px; height: 44%; background: rgb(23 17 15 / .55) }
+  .nav__menu:hover, .nav__link:hover { opacity: .6 }
+
+  .menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    display: grid;
+    min-width: clamp(200px, 15vw, 280px);
+    padding: 10px;
+    background: var(--cream);
+    color: var(--ink);
+    border-radius: 26px;
+    box-shadow: 0 18px 40px rgb(var(--shadow) / .35);
+    opacity: 0;
+    visibility: hidden;
+    translate: 0 -8px;
+    transition: opacity .25s ease, translate .25s ease, visibility 0s linear .25s;
+  }
+  .menu.is-open {
+    opacity: 1;
+    visibility: visible;
+    translate: 0 0;
+    transition: opacity .25s ease, translate .25s ease, visibility 0s;
+  }
+  .menu__link {
+    padding: 12px 18px;
+    border-radius: 16px;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(20px, 1.5vw, 28px);
+    letter-spacing: -.02em;
+    color: inherit;
+    text-decoration: none;
+    transition: background-color .2s ease;
+  }
+  .menu__link:hover { background: rgb(23 17 15 / .07) }
+
+  .hero__foot {
+    position: absolute;
+    z-index: 3;
+    left: calc(var(--gutter) + env(safe-area-inset-left));
+    bottom: calc(var(--gutter) * 1.25 + env(safe-area-inset-bottom));
+    pointer-events: none;
+  }
+  .hero__lede {
+    margin: 0 0 clamp(18px, 2.3vw, 46px);
+    font-weight: 300;
+    font-size: clamp(16px, 1.27vw, 26px);
+    line-height: 1.2;
+    letter-spacing: -.005em;
+  }
+
+  .logo {
+    display: inline-flex;
+    align-items: flex-start;
+    font-family: var(--logo);
+    font-size: clamp(34px, 3.05vw, 62px);
+    line-height: .9;
+    letter-spacing: -.012em;
+    color: var(--cream);
+    text-decoration: none;
+    pointer-events: auto;
+  }
+  .logo sup {
+    font-family: var(--body);
+    font-weight: 600;
+    font-size: .36em;
+    line-height: 1;
+    margin: -.05em 0 0 .18em;
+  }
+
+  .status {
+    position: absolute;
+    z-index: 3;
+    right: calc(var(--gutter) + env(safe-area-inset-right));
+    bottom: calc(var(--gutter) * 1.25 + env(safe-area-inset-bottom));
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: rgb(247 242 232 / .8);
+    transition: opacity .6s ease;
+  }
+  .status[hidden] { display: block; opacity: 0 }
+
+  :focus-visible { outline: 2px solid var(--cream); outline-offset: 4px }
+  .nav :focus-visible { outline-color: var(--ink); outline-offset: -4px }
+
+  @media (orientation: portrait) {
+    .hero__title { font-size: 27.5vw; top: 40% }
+  }
+  @media (max-width: 600px) {
+    .koi { filter: drop-shadow(var(--sx, -6px) var(--sy, 14px) var(--sb, 12px) rgb(var(--shadow) / .5)) }
+  }
+  @media (max-height: 480px) and (orientation: landscape) {
+    .hero__lede { margin-bottom: 12px; font-size: 14px }
+    .logo { font-size: 30px }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .star { animation: none }
+    .koi { transition: none }
+    .ripple { display: none }
+    .pellet { animation: none }
+    .menu, .menu.is-open { transition: none }
+  }
+</style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+<main class="hero" id="hero">
+  <div class="sky" id="sky" aria-hidden="true"></div>
+
+  <h1 class="hero__title">Craft</h1>
+
+  <canvas class="koi" id="koi" aria-hidden="true"></canvas>
+
+  <div class="pond" id="pond" aria-hidden="true"></div>
+
+  <nav class="nav" aria-label="Primary">
+    <button class="nav__menu" type="button" aria-label="Show menu" aria-expanded="false" aria-controls="menu">
+      <svg viewBox="0 0 24 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M1 1h22M1 7h22M1 13h22"/>
+      </svg>
+    </button>
+    <span class="nav__rule" aria-hidden="true"></span>
+    <a class="nav__link" href="#services">Services</a>
+    <div class="menu" id="menu">
+      <a class="menu__link" href="#work">Work</a>
+      <a class="menu__link" href="#studio">Studio</a>
+      <a class="menu__link" href="#approach">Approach</a>
+      <a class="menu__link" href="#journal">Journal</a>
+      <a class="menu__link" href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <div class="hero__foot">
+    <p class="hero__lede">Branding shaped to endure and evolve<br>with your ambition</p>
+    <a class="logo" href="#" aria-label="Finsmith, home">FINSMITH<sup aria-hidden="true">®</sup></a>
+  </div>
+
+  <p class="status" id="status" role="status">Calling koi</p>
+</main>
+
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const MODEL_URL = 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20261013_132630_0605aa00-d02f-4d71-9db5-e0d1a8232667.glb';
+const MODEL_BYTES = 17.8e6; // fallback when the response has no Content-Length
+const NS = 32;              // spine samples
+const CRUISE = 0.3;         // fish lengths / s
+const HIST_STEP = 0.012;    // trail spacing, fish lengths
+
+const hero = document.getElementById('hero');
+const canvas = document.getElementById('koi');
+const statusEl = document.getElementById('status');
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+
+const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+const smoothstep = (x, e0, e1) => { const t = clamp((x - e0) / (e1 - e0), 0, 1); return t * t * (3 - 2 * t); };
+const angDiff = (a, b) => Math.atan2(Math.sin(a - b), Math.cos(a - b));
+
+/* ---------- sparkles ---------- */
+
+let seed = 7;
+const rand = () => (seed = seed * 16807 % 2147483647) / 2147483647;
+
+const SVG_NS = 'http://www.w3.org/2000/svg';
+const STAR_PATH = 'M12 0c.7 7.2 4.8 11.3 12 12-7.2.7-11.3 4.8-12 12-.7-7.2-4.8-11.3-12-12 7.2-.7 11.3-4.8 12-12z';
+const STARS = [[21.6, 13.4, 34], [83.6, 76.6, 36], [31, 23, 13], [30.2, 67.4, 11], [50.2, 81, 9], [74.9, 30.3, 9]];
+
+function placeStar(el, left, top, size) {
+  el.style.left = `${left}%`;
+  el.style.top = `${top}%`;
+  el.style.setProperty('--s', `${size}px`);
+  el.style.setProperty('--d', `${(2.4 + rand() * 3.6).toFixed(2)}s`);
+  el.style.setProperty('--o', `${(-rand() * 6).toFixed(2)}s`);
+  return el;
+}
+
+const sparkles = document.createDocumentFragment();
+for (const [left, top, size] of STARS) {
+  const svg = document.createElementNS(SVG_NS, 'svg');
+  svg.setAttribute('class', 'star');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  const path = document.createElementNS(SVG_NS, 'path');
+  path.setAttribute('d', STAR_PATH);
+  svg.append(path);
+  sparkles.append(placeStar(svg, left, top, size));
+}
+for (let i = 0; i < 16; i++) {
+  const dot = document.createElement('span');
+  dot.className = 'star dot';
+  const left = 4 + rand() * 92, top = 5 + rand() * 88, size = 2.5 + rand() * 2.5;
+  sparkles.append(placeStar(dot, left.toFixed(2), top.toFixed(2), size.toFixed(2)));
+}
+document.getElementById('sky').append(sparkles);
+
+/* ---------- scene ---------- */
+
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
+renderer.setClearColor(0x000000, 0);
+renderer.toneMapping = THREE.NeutralToneMapping;
+renderer.toneMappingExposure = 1.0;
+
+const scene = new THREE.Scene();
+const pmrem = new THREE.PMREMGenerator(renderer);
+const room = new RoomEnvironment();
+scene.environment = pmrem.fromScene(room, 0.04).texture;
+scene.environmentIntensity = 0.85;
+room.dispose();
+pmrem.dispose();
+
+const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 50);
+camera.position.set(0, 0, 10);
+camera.lookAt(0, 0, 0);
+
+const key = new THREE.DirectionalLight(0xfff0dc, 2.4);
+key.position.set(-3, 5, 8);
+const rim = new THREE.DirectionalLight(0xffb48a, 0.9);
+rim.position.set(5, -3, 4);
+scene.add(key, rim, new THREE.AmbientLight(0xffffff, 0.35));
+
+const view = { w: 1, h: 1, len: 1, bx: 1, by: 1, pxW: 0, pxH: 0 };
+
+const uniforms = {
+  uSpine: { value: new Float32Array(NS * 4) },
+  uLen: { value: 1 },
+  uTime: { value: 0 },
+  uSweep: { value: 0 },
+  uFlutter: { value: 0 },
+};
+
+let sized = false;
+function resize() {
+  const w = hero.clientWidth, h = hero.clientHeight;
+  if (!w || !h) return;
+  renderer.setPixelRatio(Math.min(devicePixelRatio, w < 700 ? 1.75 : 2));
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  view.pxW = w;
+  view.pxH = h;
+  view.h = 2 * 10 * Math.tan(THREE.MathUtils.degToRad(17.5));
+  view.w = view.h * camera.aspect;
+  view.len = w >= h ? Math.min(view.w * 0.66, view.h * 1.15) : Math.min(view.w * 1.2, view.h * 0.62);
+  view.bx = (view.w / view.len) * 0.5 * 0.8;
+  view.by = (view.h / view.len) * 0.5 * 0.74;
+  uniforms.uLen.value = view.len;
+  sized = true;
+  if (started) render();
+  else tryStart();
+}
+new ResizeObserver(resize).observe(hero);
+
+/* ---------- koi material ---------- */
+
+const KOI_VERT = /* glsl */`
+#define NS 32
+uniform vec4 uSpine[NS];
+uniform float uLen, uTime, uSweep, uFlutter;
+varying float vFin;
+vec3 koiP, koiX, koiY, koiZ, koiLocal;
+vec4 koiAt(int i){ return uSpine[clamp(i, 0, NS - 1)]; }
+void koiSolve(){
+  vec3 lp = position; float al = abs(lp.y);
+  float fin = smoothstep(0.07, 0.17, al); float tail = smoothstep(0.68, 0.98, lp.x); float side = fin * (1.0 - tail);
+  float sweep = uSweep + 0.09 * sin(uTime * 1.7 + lp.x * 4.0);
+  lp.x += side * (al - 0.07) * sweep * 1.3;
+  lp.z += side * sin(uTime * 2.6 - al * 16.0 + lp.x * 5.0) * 0.02 * (al / 0.2) * uFlutter;
+  lp.z += tail * sin(uTime * 2.2 - lp.x * 14.0 + lp.y * 9.0) * 0.024 * uFlutter;
+  lp.y *= 1.0 + tail * 0.1 * sin(uTime * 1.3 + lp.x * 6.0) * uFlutter;
+  vFin = max(fin, smoothstep(0.71, 0.8, position.x)); koiLocal = lp;
+  float f = clamp(lp.x, 0.0, 1.0) * float(NS - 1); float fi = min(floor(f), float(NS - 2)); float t = f - fi; int i = int(fi);
+  vec4 p0 = koiAt(i - 1), p1 = koiAt(i), p2 = koiAt(i + 1), p3 = koiAt(i + 2);
+  vec3 a = -p0.xyz + p2.xyz;
+  vec3 b = 2.0 * p0.xyz - 5.0 * p1.xyz + 4.0 * p2.xyz - p3.xyz;
+  vec3 c = -p0.xyz + 3.0 * p1.xyz - 3.0 * p2.xyz + p3.xyz;
+  koiP = 0.5 * (2.0 * p1.xyz + a * t + b * t * t + c * t * t * t);
+  vec3 tangent = normalize(a + 2.0 * b * t + 3.0 * c * t * t);
+  float roll = mix(p1.w, p2.w, t); float cr = cos(roll), sr = sin(roll);
+  vec3 flatY = normalize(cross(vec3(0.0, 0.0, 1.0), tangent)); vec3 flatZ = cross(tangent, flatY);
+  koiX = tangent; koiY = flatY * cr + flatZ * sr; koiZ = flatZ * cr - flatY * sr;
+}
+`;
+
+const KOI_NORMAL = /* glsl */`
+koiSolve();
+vec3 objectNormal = normalize(koiX * normal.x + koiY * normal.y + koiZ * normal.z);
+#ifdef USE_TANGENT
+  vec3 objectTangent = normalize(koiX * tangent.x + koiY * tangent.y + koiZ * tangent.z);
+#endif
+`;
+
+const KOI_MAP = /* glsl */`
+#include <map_fragment>
+diffuseColor.rgb = max(mix(vec3(dot(diffuseColor.rgb, vec3(0.2126, 0.7152, 0.0722))), diffuseColor.rgb, 1.22), 0.0);
+diffuseColor.a *= mix(1.0, 0.84, vFin);
+`;
+
+function koiMaterial(source, anisotropy) {
+  const material = source.isMeshStandardMaterial
+    ? source.clone()
+    : new THREE.MeshStandardMaterial({ map: source.map ?? null, color: source.color ?? 0xffffff });
+  material.transparent = true;
+  material.depthWrite = true;
+  for (const k of Object.keys(material)) if (material[k]?.isTexture) material[k].anisotropy = anisotropy;
+
+  material.onBeforeCompile = (shader) => {
+    Object.assign(shader.uniforms, uniforms);
+    shader.vertexShader = shader.vertexShader
+      .replace('#include <common>', `#include <common>\n${KOI_VERT}`)
+      .replace('#include <beginnormal_vertex>', KOI_NORMAL)
+      .replace('#include <begin_vertex>', 'vec3 transformed = koiP + (koiY * koiLocal.y + koiZ * koiLocal.z) * uLen;');
+    shader.fragmentShader = shader.fragmentShader
+      .replace('#include <common>', '#include <common>\nvarying float vFin;')
+      .replace('#include <map_fragment>', KOI_MAP)
+      .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\ntotalEmissiveRadiance += diffuseColor.rgb * vFin * 0.22;');
+  };
+  material.customProgramCacheKey = () => 'koi';
+  return material;
+}
+
+/* ---------- model ---------- */
+
+let modelReady = false;
+
+function onModel(gltf) {
+  const root = gltf.scene;
+  root.updateMatrixWorld(true);
+  const box = new THREE.Box3().setFromObject(root);
+  const len = box.max.z - box.min.z;
+
+  // nose (+Z) -> x = 0, tail -> x = 1; dorsal (+X) -> z; lateral stays y
+  const bake = new THREE.Matrix4().makeScale(1 / len, 1 / len, 1 / len)
+    .multiply(new THREE.Matrix4().set(0, 0, -1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1))
+    .multiply(new THREE.Matrix4().makeTranslation(0, 0, -box.max.z));
+
+  const anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+  const sources = [];
+  root.traverse((o) => { if (o.isMesh) sources.push(o); });
+
+  for (const src of sources) {
+    const geometry = src.geometry.clone().applyMatrix4(new THREE.Matrix4().multiplyMatrices(bake, src.matrixWorld));
+    const material = Array.isArray(src.material)
+      ? src.material.map((m) => koiMaterial(m, anisotropy))
+      : koiMaterial(src.material, anisotropy);
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.frustumCulled = false;
+    scene.add(mesh);
+  }
+
+  renderer.compile(scene, camera);
+  statusEl.hidden = true;
+  modelReady = true;
+  tryStart();
+}
+
+new GLTFLoader().load(
+  MODEL_URL,
+  onModel,
+  (e) => {
+    const total = e.lengthComputable && e.total ? e.total : MODEL_BYTES;
+    statusEl.textContent = `Calling koi ${Math.min(99, Math.round((e.loaded / total) * 100))}%`;
+  },
+  (err) => {
+    console.error(err);
+    statusEl.hidden = false;
+    statusEl.textContent = 'Our koi is unable to appear';
+  },
+);
+
+/* ---------- swim ---------- */
+
+const fish = { x: 0, y: 0, z: 0, heading: 0, omega: 0, speed: 0, roll: 0, phase: 0, sweep: 0, dartUntil: -1, wake: 0 };
+const pointer = { x: 0, y: 0, seen: -1e9, down: false };
+const pellets = []; // food on the surface, newest last
+let trail = [];
+let clock = 0;
+let born = 0;
+
+const POSE = [[0.52, -0.02], [0.4, 0.107], [0.267, 0.22], [0.1, 0.293], [-0.1, 0.287], [-0.227, 0.153], [-0.18, 0], [-0.033, -0.107], [0.12, -0.2]];
+
+function seedPose() {
+  const cx = (view.w / view.len) * 0.055;
+  const curve = new THREE.CatmullRomCurve3(POSE.map(([x, y]) => new THREE.Vector3(x + cx, y, 0)), false, 'centripetal');
+  const total = curve.getLength();
+  const n = Math.ceil(total / HIST_STEP);
+  const p = new THREE.Vector3();
+  trail = [];
+  for (let i = 0; i <= n; i++) {
+    const u = i / n;
+    curve.getPointAt(u, p);
+    trail.push({ x: p.x, y: p.y, z: 0, r: 0, d: u * total });
+  }
+  const head = trail[n], back = trail[n - 4];
+  Object.assign(fish, {
+    x: head.x, y: head.y, z: 0,
+    heading: Math.atan2(head.y - back.y, head.x - back.x),
+    omega: 0.5, speed: 0, roll: 0, phase: 0, sweep: 0, wake: 0,
+  });
+}
+
+function steer(t, dt) {
+  const darting = t < fish.dartUntil;
+  const food = pellets[pellets.length - 1];
+  const target = pointer.down || !food ? pointer : food;
+  const chasing = pointer.down || !!food || t - pointer.seen < 2.6;
+  const feeding = chasing && target === food;
+  let foodDist = Infinity;
+
+  let omega = 0.42 * Math.sin(t * 0.31 + 1.3) + 0.3 * Math.sin(t * 0.53 + 4.1) + 0.36 * Math.sin(t * 0.17);
+  let speed = CRUISE * (1 + 0.28 * Math.sin(t * 0.37 + 2.0));
+
+  if (chasing) {
+    // aim at the finger, food or cursor, but never past the soft walls
+    let px = target.x, py = target.y;
+    const reach = Math.hypot(px / view.bx, py / view.by), limit = feeding ? 0.8 : 0.9;
+    if (reach > limit) { px *= limit / reach; py *= limit / reach; }
+    const dx = px - fish.x, dy = py - fish.y;
+    const dist = Math.hypot(dx, dy);
+    if (dist > 0.16) {
+      omega = omega * 0.25 + angDiff(Math.atan2(dy, dx), fish.heading) * 2.4;
+      speed = CRUISE * 0.8 + Math.min(dist, 1.3) * (darting ? 1.1 : 0.62);
+    } else {
+      // close to food, keep homing in so it gets eaten instead of circled
+      if (feeding) omega = angDiff(Math.atan2(dy, dx), fish.heading) * 2.4;
+      speed = CRUISE * 0.55;
+    }
+    if (feeding) {
+      foodDist = dist;
+      speed = Math.min(speed, CRUISE * 0.5 + dist * 1.1); // ease off on the final approach
+    }
+  }
+
+  // soft walls: look ahead (further when fast, never past food it is closing on),
+  // brake and turn back toward the middle
+  const look = Math.min(0.28 * Math.max(1, fish.speed / CRUISE), Math.max(0.2, foodDist));
+  const ax = fish.x + Math.cos(fish.heading) * look;
+  const ay = fish.y + Math.sin(fish.heading) * look;
+  const out = Math.hypot(ax / view.bx, ay / view.by) - 1;
+  if (out > 0) {
+    const w = Math.min(1, out * 2.5);
+    omega += (angDiff(Math.atan2(-ay, -ax), fish.heading) * 1.9 - omega) * w;
+    speed = Math.min(speed, CRUISE * (3 - 2 * w));
+  }
+
+  const maxTurn = foodDist < 0.3 ? 3.2 : 1.5 + speed * 2.2; // snap round onto food
+  omega = clamp(omega, -maxTurn, maxTurn);
+  fish.omega += (omega - fish.omega) * Math.min(1, (darting ? 5 : 3.2) * dt);
+  fish.speed += (speed - fish.speed) * Math.min(1, (speed > fish.speed || out > 0 || feeding ? 2.6 : 0.9) * dt);
+}
+
+function advance(t, dt) {
+  steer(t, dt);
+
+  const sn = fish.speed / CRUISE;
+  fish.phase += dt * Math.PI * 2 * (0.5 + 0.48 * sn);
+  const v = fish.speed * (1 + 0.14 * Math.sin(fish.phase * 2));
+
+  fish.heading += fish.omega * dt;
+  fish.x += Math.cos(fish.heading) * v * dt;
+  fish.y += Math.sin(fish.heading) * v * dt;
+
+  const depth = 0.1 * Math.sin(t * 0.23) + 0.07 * Math.sin(t * 0.41 + 2.0);
+  fish.z += (depth - fish.z) * Math.min(1, 1.5 * dt);
+  fish.roll += (clamp(fish.omega * 0.26, -0.6, 0.6) - fish.roll) * Math.min(1, 4 * dt);
+  fish.sweep += (clamp((sn - 1) * 0.22, -0.05, 0.5) - fish.sweep) * Math.min(1, 3 * dt);
+
+  const head = trail[trail.length - 1];
+  const prev = trail[trail.length - 2];
+  head.x = fish.x;
+  head.y = fish.y;
+  head.z = fish.z;
+  head.r = fish.roll;
+  head.d = prev.d + Math.hypot(head.x - prev.x, head.y - prev.y, head.z - prev.z);
+  if (head.d - prev.d >= HIST_STEP) trail.push({ ...head });
+  while (trail.length > 2 && trail[1].d < head.d - 1.25) trail.shift();
+}
+
+const sx = new Float32Array(NS), sy = new Float32Array(NS), sz = new Float32Array(NS), sr = new Float32Array(NS);
+
+function writeSpine() {
+  const head = trail[trail.length - 1];
+  let k = trail.length - 1;
+  for (let i = 0; i < NS; i++) {
+    const d = head.d - i / (NS - 1);
+    while (k > 1 && trail[k - 1].d > d) k--;
+    const a = trail[k - 1], b = trail[k];
+    const u = b.d > a.d ? clamp((d - a.d) / (b.d - a.d), 0, 1) : 0;
+    sx[i] = a.x + (b.x - a.x) * u;
+    sy[i] = a.y + (b.y - a.y) * u;
+    sz[i] = a.z + (b.z - a.z) * u;
+    sr[i] = a.r + (b.r - a.r) * u;
+  }
+
+  const sn = fish.speed / CRUISE;
+  const amp = (0.45 + 0.55 * Math.min(sn, 2.2)) * fish.wake;
+  const spine = uniforms.uSpine.value;
+  const len = view.len;
+  for (let i = 0; i < NS; i++) {
+    const s = i / (NS - 1);
+    const i0 = Math.max(i - 1, 0), i1 = Math.min(i + 1, NS - 1);
+    let tx = sx[i1] - sx[i0], ty = sy[i1] - sy[i0];
+    const tl = Math.hypot(tx, ty) || 1;
+    tx /= tl;
+    ty /= tl;
+    const wave = (0.008 + 0.085 * s ** 1.7) * amp * Math.sin(fish.phase - s * 5.4);
+    spine[i * 4] = (sx[i] - ty * wave) * len;
+    spine[i * 4 + 1] = (sy[i] + tx * wave) * len;
+    spine[i * 4 + 2] = sz[i] * len;
+    spine[i * 4 + 3] = sr[i] * (1 - s * 0.6);
+  }
+}
+
+const shadowVars = { '--sx': '', '--sy': '', '--sb': '' };
+function setShadowVar(name, px) {
+  const value = `${px.toFixed(1)}px`;
+  if (shadowVars[name] === value) return;
+  shadowVars[name] = value;
+  canvas.style.setProperty(name, value);
+}
+
+function updateShadow() {
+  const lift = 1 + (fish.z + 0.17) * 3.2;
+  const unit = Math.min(view.pxW, view.pxH * 1.6) / 100;
+  setShadowVar('--sx', -0.55 * unit * lift);
+  setShadowVar('--sy', 1.25 * unit * lift);
+  setShadowVar('--sb', 0.95 * unit * (0.6 + lift * 0.5));
+}
+
+function render() {
+  writeSpine();
+  updateShadow();
+  renderer.render(scene, camera);
+}
+
+function tick(dt) {
+  if (!reducedMotion.matches) {
+    clock += dt;
+    fish.wake = smoothstep(clock - born, 0.7, 2.6);
+    if (fish.wake > 0) {
+      advance(clock, dt * (0.25 + 0.75 * fish.wake));
+      surfaceRipples();
+    }
+    uniforms.uTime.value = clock;
+    uniforms.uSweep.value = fish.sweep;
+    uniforms.uFlutter.value = 0.35 + 0.65 * fish.wake;
+  } else {
+    uniforms.uFlutter.value = 0;
+  }
+  feed();
+  render();
+}
+
+/* ---------- start ---------- */
+
+let started = false;
+let last = 0;
+
+function frame(now) {
+  requestAnimationFrame(frame);
+  const dt = Math.min((now - last) / 1000, 1 / 20);
+  last = now;
+  tick(Math.max(dt, 0));
+}
+
+function tryStart() {
+  if (started || !modelReady || !sized) return;
+  started = true;
+  seedPose();
+  born = clock;
+  tick(0);
+  canvas.classList.add('is-ready');
+  last = performance.now();
+  requestAnimationFrame(frame);
+  hintTimer = setTimeout(showHint, 2600);
+}
+
+resize(); // measure now as well; the observer only reports once the page renders
+
+/* ---------- pointer ---------- */
+
+function toPond(e) {
+  const r = hero.getBoundingClientRect();
+  pointer.x = ((e.clientX - r.left) / r.width - 0.5) * view.w / view.len;
+  pointer.y = (0.5 - (e.clientY - r.top) / r.height) * view.h / view.len;
+}
+
+hero.addEventListener('pointermove', (e) => {
+  toPond(e);
+  pointer.seen = clock;
+});
+
+hero.addEventListener('pointerdown', (e) => {
+  if (menuOpen && !e.target.closest('.nav')) {
+    setMenu(false);
+    return;
+  }
+  if (e.target.closest('a, button, .menu')) return;
+  toPond(e);
+  pointer.down = e.pointerType !== 'mouse';
+  pointer.seen = clock;
+  fish.dartUntil = clock + 1.2;
+  dropPellet(e);
+});
+
+const release = () => { pointer.down = false; };
+addEventListener('pointerup', release);
+addEventListener('pointercancel', release);
+
+/* ---------- feeding ---------- */
+
+const pond = document.getElementById('pond');
+const MAX_PELLETS = 3;
+const PELLET_LIFE = 7;    // s before uneaten food sinks
+const EAT_RADIUS = 0.1;   // fish lengths from the nose
+const wallClock = () => performance.now() / 1000;
+
+function ripple(left, top, size = 1, soft = false) {
+  if (reducedMotion.matches) return;
+  for (let i = 0; i < 2; i++) {
+    const ring = document.createElement('span');
+    ring.className = soft ? 'ripple ripple--soft' : 'ripple';
+    ring.style.left = `${left}px`;
+    ring.style.top = `${top}px`;
+    ring.style.setProperty('--k', size);
+    ring.style.animationDelay = `${i * 0.24}s`;
+    ring.addEventListener('animationend', () => ring.remove());
+    pond.append(ring);
+  }
+}
+
+function dropPellet(e) {
+  if (!started) return;
+  const r = hero.getBoundingClientRect();
+  const fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height;
+  if (pellets.length >= MAX_PELLETS) retirePellet(pellets.shift(), 'is-sinking');
+  const el = document.createElement('span');
+  el.className = 'pellet';
+  el.style.left = `${fx * 100}%`;
+  el.style.top = `${fy * 100}%`;
+  pond.append(el);
+  pellets.push({
+    fx, fy, el, born: wallClock(),
+    get x() { return (this.fx - 0.5) * view.w / view.len; },
+    get y() { return (0.5 - this.fy) * view.h / view.len; },
+  });
+  ripple(fx * r.width, fy * r.height);
+  hideHint();
+}
+
+function retirePellet(p, state) {
+  if (reducedMotion.matches) {
+    p.el.remove();
+    return;
+  }
+  p.el.addEventListener('animationend', (e) => {
+    if (e.animationName === 'pellet-eaten' || e.animationName === 'pellet-sink') p.el.remove();
+  });
+  p.el.classList.add(state);
+}
+
+function feed() {
+  const now = wallClock();
+  for (let i = pellets.length - 1; i >= 0; i--) {
+    const p = pellets[i];
+    if (fish.wake > 0 && Math.hypot(p.x - fish.x, p.y - fish.y) < EAT_RADIUS) {
+      pellets.splice(i, 1);
+      retirePellet(p, 'is-eaten');
+      ripple(p.fx * view.pxW, p.fy * view.pxH, 0.6);
+    } else if (now - p.born > PELLET_LIFE) {
+      pellets.splice(i, 1);
+      retirePellet(p, 'is-sinking');
+    }
+  }
+}
+
+// faint rings where the koi's nose nears the surface
+let lastSurface = 0;
+function surfaceRipples() {
+  if (fish.wake < 1 || fish.z < 0.12 || clock - lastSurface < 1.8) return;
+  lastSurface = clock;
+  const near = 10 / (10 - fish.z * view.len);
+  ripple(
+    (0.5 + (fish.x * view.len / view.w) * near) * view.pxW,
+    (0.5 - (fish.y * view.len / view.h) * near) * view.pxH,
+    0.5,
+    true,
+  );
+}
+
+let hintTimer = 0;
+function showHint() {
+  if (reducedMotion.matches || pellets.length) return;
+  statusEl.textContent = matchMedia('(hover: hover)').matches ? 'Click to feed the koi' : 'Tap to feed the koi';
+  statusEl.hidden = false;
+  hintTimer = setTimeout(hideHint, 6000);
+}
+function hideHint() {
+  clearTimeout(hintTimer);
+  if (statusEl.textContent.endsWith('feed the koi')) statusEl.hidden = true;
+}
+
+/* ---------- menu ---------- */
+
+const menuButton = document.querySelector('.nav__menu');
+const menuIcon = menuButton.querySelector('path');
+const menu = document.getElementById('menu');
+let menuOpen = false;
+
+function setMenu(open) {
+  menuOpen = open;
+  menu.classList.toggle('is-open', open);
+  menuButton.setAttribute('aria-expanded', String(open));
+  menuButton.setAttribute('aria-label', open ? 'Hide menu' : 'Show menu');
+  menuIcon.setAttribute('d', open ? 'M5 1l14 12M19 1L5 13' : 'M1 1h22M1 7h22M1 13h22');
+}
+
+menuButton.addEventListener('click', () => setMenu(!menuOpen));
+menu.addEventListener('click', (e) => { if (e.target.closest('a')) setMenu(false); });
+addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && menuOpen) {
+    setMenu(false);
+    menuButton.focus();
+  }
+});
+</script>
+</body>
+</html>
